@@ -123,16 +123,16 @@ class Karl:
         self.block_number = block_number or self.web3.eth.blockNumber
 
         def run(self, forever=True):
-        self.logger.info("Starting scraping process")
+            self.logger.info("Starting scraping process")
 
-        try:
-            while forever:
-                block = self.web3.eth.getBlock(
-                    self.block_number, full_transactions=True
-                )
+            try:
+                while forever:
+                    block = self.web3.eth.getBlock(
+                        self.block_number, full_transactions=True
+                    )
 
-                # Debug print
-                print("Block number:", self.block_number)
+                    # Debug print
+                    print("Block number:", self.block_number)
 
                 # If new block is not yet mined sleep and retry
                 if block is None:
