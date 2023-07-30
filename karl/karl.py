@@ -207,7 +207,6 @@ class Karl:
             strategy="bfs",
             disassembler=disassembler,
             address=contract_address,
-            execution_timeout=self.timeout,
             solver_timeout=self.timeout,
             loop_bound=self.loop_bound,
             max_depth=64,
