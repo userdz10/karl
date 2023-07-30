@@ -123,14 +123,16 @@ class Karl:
         self.block_number = block_number or self.web3.eth.blockNumber
 
     def run(self, forever=True):
-        self.logger.info("Starting scraping process")
+    self.logger.info("Starting scraping process")
 
-        # TODO: Refactor try-except statements
-        try:
-            while forever:
-                block = self.web3.eth.getBlock(
-                    self.block_number, full_transactions=True
-                )
+    try:
+        while forever:
+            block = self.web3.eth.getBlock(
+                self.block_number, full_transactions=True
+            )
+
+            # Debug print
+            print("Block number:", self.block_number)
 
                 # If new block is not yet mined sleep and retry
                 if block is None:
@@ -192,32 +194,35 @@ class Karl:
             self.logger.info("Shutting down.")
 
     def _run_mythril(self, contract_address=None):
-        eth_json_rpc = EthJsonRpc(url=self.web3_rpc)
+    eth_json_rpc = EthJsonRpc(url=self.web3_rpc)
 
-        disassembler = MythrilDisassembler(
-            eth=eth_json_rpc, solc_version=None, enable_online_lookup=True
-        )
+    disassembler = MythrilDisassembler(
+        eth=eth_json_rpc, solc_version=None, enable_online_lookup=True
+    )
 
-        disassembler.load_from_address(contract_address)
+    disassembler.load_from_address(contract_address)
 
-        analyzer = MythrilAnalyzer(
-            strategy="bfs",
-            use_onchain_data=self.onchain_storage,
-            disassembler=disassembler,
-            address=contract_address,
-            execution_timeout=self.timeout,
-            solver_timeout=self.timeout,
-            loop_bound=self.loop_bound,
-            max_depth=64,
-            create_timeout=10,
-        )
+    analyzer = MythrilAnalyzer(
+        strategy="bfs",
+        use_onchain_data=self.onchain_storage,
+        disassembler=disassembler,
+        address=contract_address,
+        execution_timeout=self.timeout,
+        solver_timeout=self.timeout,
+        loop_bound=self.loop_bound,
+        max_depth=64,
+        create_timeout=10,
+    )
 
-        self.logger.info("Analyzing %s", contract_address)
-        self.logger.debug("Running Mythril")
+    self.logger.info("Analyzing %s", contract_address)
+    self.logger.debug("Running Mythril")
 
-        return analyzer.fire_lasers(
-            modules=self.modules, transaction_count=self.tx_count
-        )
+    # Debug print
+    print("Contract address:", contract_address)
+
+    return analyzer.fire_lasers(
+        modules=self.modules, transaction_count=self.tx_count
+    )
 
     def _run_sandbox(
         self, block_number=None, contract_address=None, report=None, rpc=None
