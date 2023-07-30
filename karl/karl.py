@@ -129,23 +129,24 @@ class Karl:
         self.logger.info("Starting scraping process")
 
         # TODO: Refactor try-except statements
+        # Rest of the code...
+
         try:
             while forever:
-                block = self.web3.eth.getBlock(
-                    self.block_number, full_transactions=True
-                )
-
-                # If new block is not yet mined sleep and retry
-                if block is None:
+                try:
+                    block = self.web3.eth.getBlock(
+                        self.block_number, full_transactions=True
+                    )
+                except self.web3.exceptions.BlockNotFound:
+                    self.logger.info(
+                        "Block with id: %s not found. Waiting for the block to be mined...",
+                        self.block_number
+                    )
                     time.sleep(1)
                     continue
 
-                self.logger.info(
-                    "Processing block {block}".format(block=block.get("number"))
-                )
+                # Rest of the code...
 
-                # Next block to scrape
-                self.block_number += 1
 
                 # For each transaction get the newly created accounts
                 for t in block.get("transactions", []):
