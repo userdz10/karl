@@ -201,12 +201,7 @@ class Karl:
 
         disassembler.load_from_address(contract_address)
 
-        analyzer = MythrilAnalyzer(
-            disassembler=disassembler,
-            address=contract_address,
-            max_depth=64,
-            create_timeout=10,
-        )
+        analyzer = MythrilAnalyzer(disassembler=disassembler, address=contract_address)
 
         self.logger.info("Analyzing %s", contract_address)
         self.logger.debug("Running Mythril")
