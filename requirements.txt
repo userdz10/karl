@@ -1,5 +1,5 @@
 mythril==0.23.24
-web3==6.7.0
+web3==5.0.0
 eth_abi>=2.0.0b4,<3.0.0
 eth-account>=0.5.6,<0.6.0
 ethereum>=2.3.2
