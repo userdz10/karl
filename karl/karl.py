@@ -108,11 +108,6 @@ class Karl:
         self.eth_host = eth_host
         self.eth_port = int(eth_port)
         self.rpc_tls = eth_tls
-
-        # Add PoA middleware for Polygon chain
-        if "polygon" in rpc:
-            self.web3.middleware_onion.inject(geth_poa_middleware, layer=0)
-
         self.web3 = Web3(Web3.HTTPProvider(web3_rpc, request_kwargs={"timeout": 60}))
         if self.web3 is None:
             raise RPCError(
@@ -121,7 +116,14 @@ class Karl:
                 "or HOST:PORT".format(rpc)
             )
 
+        # Add PoA middleware for handling PoA chains
+        if "polygon" in rpc:
+            self.web3.middleware_onion.inject(geth_poa_middleware, layer=0)
+
         self.block_number = block_number or self.web3.eth.blockNumber
+
+    # Rest of the code...
+
 
     def run(self, forever=True):
         self.logger.info("Starting scraping process")
