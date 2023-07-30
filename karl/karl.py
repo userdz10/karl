@@ -12,6 +12,7 @@ from karl.exceptions import RPCError
 from karl.sandbox.sandbox import Sandbox
 from karl.sandbox.exceptions import SandboxBaseException
 from karl.ethrpcclient.ethjsonrpc import EthJsonRpc
+from web3.middleware import geth_poa_middleware
 
 logging.basicConfig(level=logging.INFO)
 
@@ -107,6 +108,11 @@ class Karl:
         self.eth_host = eth_host
         self.eth_port = int(eth_port)
         self.rpc_tls = eth_tls
+
+        # Add PoA middleware for Polygon chain
+        if "polygon" in rpc:
+            self.web3.middleware_onion.inject(geth_poa_middleware, layer=0)
+
         self.web3 = Web3(Web3.HTTPProvider(web3_rpc, request_kwargs={"timeout": 60}))
         if self.web3 is None:
             raise RPCError(
@@ -229,9 +235,3 @@ class Karl:
             self.logger.error(e)
 
         return sandbox.check_exploitability()
-
-
-# Usage example
-rpc_url = "https://polygon-rpc.com"  # Replace with the actual Polygon RPC URL
-karl = Karl(rpc=rpc_url)
-karl.run()
