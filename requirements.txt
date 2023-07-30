@@ -1,4 +1,4 @@
-mythril==0.23.1
+mythril==0.22.1
 web3
 eth_abi
 eth-account
