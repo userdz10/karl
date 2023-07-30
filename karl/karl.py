@@ -205,7 +205,6 @@ class Karl:
 
         analyzer = MythrilAnalyzer(
             strategy="bfs",
-            use_onchain_data=self.onchain_storage,
             disassembler=disassembler,
             address=contract_address,
             execution_timeout=self.timeout,
