@@ -2,7 +2,7 @@ from web3 import Web3
 import subprocess, os, sys, json
 
 # Use the Polygon network endpoint URL
-polygon_rpc_url = "https://rpc-mainnet.matic.network"  # Replace with the correct Polygon network RPC URL
+polygon_rpc_url = "https://polygon-mainnet.infura.io/v3/9bc7411a1d4c4c1089fef2b26e7334a9"  # Replace with the correct Polygon network RPC URL
 
 def scanContractInPeriod(web3, startBlockNumber, endBlockNumber):
     for i in range(startBlockNumber, endBlockNumber):
@@ -40,7 +40,7 @@ if __name__ == "__main__":
         auditAllContractFound()
     elif sys.argv[1] == '-s':
         web3 = Web3(Web3.HTTPProvider(polygon_rpc_url))
-        startBlockNumber = web3.eth.block_number - 10000  # Replace the value with the number of blocks you want to go back for scanning
+        startBlockNumber = web3.eth.block_number - 100  # Replace the value with the number of blocks you want to go back for scanning
         endBlockNumber = web3.eth.block_number
         scanContractInPeriod(web3, startBlockNumber, endBlockNumber)
     else:
