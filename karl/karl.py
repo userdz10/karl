@@ -7,14 +7,24 @@ from urllib.parse import urlparse
 from mythril.mythril import MythrilAnalyzer
 from mythril.mythril import MythrilDisassembler
 
-from web3 import Web3
+from web3 import Web3, HTTPProvider
+from web3.middleware import geth_poa_middleware
 from karl.exceptions import RPCError
 from karl.sandbox.sandbox import Sandbox
 from karl.sandbox.exceptions import SandboxBaseException
 from karl.ethrpcclient.ethjsonrpc import EthJsonRpc
+import json
 
 logging.basicConfig(level=logging.INFO)
 
+class PolygonProvider(HTTPProvider):
+    def __init__(self, *args, **kwargs):
+        super(PolygonProvider, self).__init__(*args, **kwargs)
+
+    def make_request(self, method, params):
+        if method == "eth_getBlockByNumber":
+            params[0] = hex(params[0])  # Convert block number to hex
+        return super(PolygonProvider, self).make_request(method, params)
 
 class Karl:
     """
@@ -103,11 +113,18 @@ class Karl:
             )
 
         # Init web3 client
-        self.web3_rpc = web3_rpc
+        self.web3_rpc = rpc
         self.eth_host = eth_host
         self.eth_port = int(eth_port)
         self.rpc_tls = eth_tls
-        self.web3 = Web3(Web3.HTTPProvider(web3_rpc, request_kwargs={"timeout": 60}))
+
+        if "mainnet" in rpc or "testnet" in rpc:
+            # For Ethereum mainnet and testnets, use the regular HTTPProvider
+            self.web3 = Web3(Web3.HTTPProvider(web3_rpc, request_kwargs={"timeout": 60}))
+        else:
+            # For Polygon (Matic) or other POA chains, use the custom provider
+            self.web3 = Web3(PolygonProvider(web3_rpc, request_kwargs={"timeout": 60}))
+
         if self.web3 is None:
             raise RPCError(
                 "Invalid RPC argument provided {}, use "
@@ -115,7 +132,7 @@ class Karl:
                 "or HOST:PORT".format(rpc)
             )
 
-        self.block_number = block_number or self.web3.eth.blockNumber
+    self.block_number = block_number or self.web3.eth.blockNumber
 
     def run(self, forever=True):
         self.logger.info("Starting scraping process")
