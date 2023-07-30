@@ -229,3 +229,9 @@ class Karl:
             self.logger.error(e)
 
         return sandbox.check_exploitability()
+
+
+# Usage example
+rpc_url = "https://polygon-rpc.com"  # Replace with the actual Polygon RPC URL
+karl = Karl(rpc=rpc_url)
+karl.run()
