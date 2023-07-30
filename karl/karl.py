@@ -202,7 +202,6 @@ class Karl:
         disassembler.load_from_address(contract_address)
 
         analyzer = MythrilAnalyzer(
-            strategy="bfs",
             disassembler=disassembler,
             address=contract_address,
             max_depth=64,
