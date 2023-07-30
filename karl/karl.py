@@ -34,7 +34,6 @@ class Karl:
         tx_count=3,
         modules=[],
         onchain_storage=True,
-        loop_bound=3,
     ):
         """
             Initialize Karl with the received parameters
@@ -57,7 +56,6 @@ class Karl:
         self.tx_count = tx_count
         self.modules = modules
         self.onchain_storage = onchain_storage
-        self.loop_bound = 3
 
         # ! hack to stop mythril logging
         logging.getLogger("mythril").setLevel(logging.CRITICAL)
@@ -207,7 +205,6 @@ class Karl:
             strategy="bfs",
             disassembler=disassembler,
             address=contract_address,
-            loop_bound=self.loop_bound,
             max_depth=64,
             create_timeout=10,
         )
