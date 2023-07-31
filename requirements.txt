@@ -1,12 +1,12 @@
 mythril==0.22.35
 web3>=4.9.1
-eth_abi<=2.0.0b9
+eth_abi==2.0.0b9
 eth-account>=0.1.0a2
 ethereum>=2.3.2
 ethereum-input-decoder>=0.2.2
 eth-hash>=0.1.0
 eth-keyfile>=0.5.1
-eth-keys>=0.2.0b3
+eth-keys==0.2.0b3
 eth-rlp>=0.1.0
 eth-tester>=0.1.0b32
 eth-typing>=2.0.0
