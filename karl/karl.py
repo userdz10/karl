@@ -12,7 +12,6 @@ from karl.exceptions import RPCError
 from karl.sandbox.sandbox import Sandbox
 from karl.sandbox.exceptions import SandboxBaseException
 from karl.ethrpcclient.ethjsonrpc import EthJsonRpc
-from web3.middleware import geth_poa_middleware
 
 logging.basicConfig(level=logging.INFO)
 
@@ -116,14 +115,7 @@ class Karl:
                 "or HOST:PORT".format(rpc)
             )
 
-        # Add PoA middleware for handling PoA chains
-        if "polygon" in rpc:
-            self.web3.middleware_onion.inject(geth_poa_middleware, layer=0)
-
         self.block_number = block_number or self.web3.eth.blockNumber
-
-    # Rest of the code...
-
 
     def run(self, forever=True):
         self.logger.info("Starting scraping process")
